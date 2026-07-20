@@ -709,6 +709,19 @@ input {
   .fighter-slot--b {
     order: 2;
   }
+
+  .result-view__portraits {
+    flex-direction: column;
+  }
+
+  .result-view__vs {
+    order: 1;
+    margin: -0.5rem 0;
+  }
+
+  .portrait-card--b {
+    order: 2;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
