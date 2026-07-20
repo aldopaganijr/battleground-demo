@@ -61,7 +61,7 @@ async function getImage(fighter) {
     model: 'gpt-image-2',
     prompt: ART_STYLE_TEMPLATE(fighter),
     size: '1024x1024',
-    quality: 'medium',
+    quality: 'low',
   });
   return `data:image/png;base64,${result.data[0].b64_json}`;
 }
