@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My BattleDex — Battleground</title>
+  <meta name="description" content="Your saved Battleground fighters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="arena arena--dex">
+    <div class="arena__side arena__side--a" aria-hidden="true"></div>
+    <div class="arena__side arena__side--b" aria-hidden="true"></div>
+
+    <header class="hud">
+      <a class="hud__logo" href="index.html">Battleground</a>
+      <a class="hud__link" href="index.html">New Fight</a>
+    </header>
+
+    <main class="dex">
+      <h1 class="dex__title">My BattleDex</h1>
+
+      <div id="dexEmpty" class="dex__empty" hidden>
+        <p>No fighters saved yet. Win or lose, save your favorites after a fight.</p>
+        <a class="fight-again-button" href="index.html">Start a Fight</a>
+      </div>
+
+      <div id="dexGrid" class="dex__grid"></div>
+    </main>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/battledex.js"></script>
+</body>
+</html>
