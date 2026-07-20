@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Battleground — Who Would Win?</title>
+  <meta name="description" content="Type two fighters. Anything. Find out who wins." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="arena">
+    <div class="arena__side arena__side--a" aria-hidden="true"></div>
+    <div class="arena__side arena__side--b" aria-hidden="true"></div>
+
+    <header class="hud">
+      <span class="hud__logo">Battleground</span>
+      <a class="hud__link" href="battledex.html">My BattleDex</a>
+    </header>
+
+    <main class="ring">
+      <section class="fighter-slot fighter-slot--a">
+        <span class="fighter-slot__eyebrow">Fighter A</span>
+        <input
+          id="fighterA"
+          class="fighter-slot__input"
+          type="text"
+          maxlength="80"
+          autocomplete="off"
+          placeholder="Type a fighter… (try '10 lions')"
+        />
+      </section>
+
+      <div class="seam">
+        <button id="fightButton" class="fight-button" type="button">
+          <span class="fight-button__vs">VS</span>
+          <span class="fight-button__label">Fight!</span>
+        </button>
+      </div>
+
+      <section class="fighter-slot fighter-slot--b">
+        <span class="fighter-slot__eyebrow">Fighter B</span>
+        <input
+          id="fighterB"
+          class="fighter-slot__input"
+          type="text"
+          maxlength="80"
+          autocomplete="off"
+          placeholder="Type a fighter… (try 'a very angry toaster')"
+        />
+      </section>
+    </main>
+
+    <p id="formError" class="form-error" role="alert" hidden></p>
+  </div>
+</body>
+</html>

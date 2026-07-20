@@ -1,0 +1,307 @@
+:root {
+  --ink: #120f1b;
+  --ink-deep: #0a0812;
+  --outline: #0b0910;
+  --red: #ff4655;
+  --red-deep: #7a2230;
+  --blue: #2bc5e8;
+  --blue-deep: #1c4a56;
+  --gold: #ffc93c;
+  --paper: #f5f1e8;
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Rajdhani", "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", "Courier New", monospace;
+
+  --outline-width: 4px;
+  --panel-shadow: 8px 8px 0 var(--outline);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+/* ---------- Arena backdrop ---------- */
+
+.arena {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.arena__side {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.arena__side--a {
+  background:
+    radial-gradient(circle, rgba(245, 241, 232, 0.09) 1.5px, transparent 1.5px) 0 0 / 16px 16px,
+    linear-gradient(155deg, var(--red-deep), var(--ink) 68%);
+  clip-path: polygon(
+    0 0, 62% 0, 54% 8%, 60% 16%, 50% 24%, 58% 33%, 48% 42%, 56% 51%,
+    46% 60%, 54% 69%, 44% 78%, 52% 87%, 42% 96%, 46% 100%, 0 100%
+  );
+}
+
+.arena__side--b {
+  background:
+    radial-gradient(circle, rgba(245, 241, 232, 0.09) 1.5px, transparent 1.5px) 0 0 / 16px 16px,
+    linear-gradient(205deg, var(--blue-deep), var(--ink) 68%);
+  clip-path: polygon(
+    62% 0, 100% 0, 100% 100%, 46% 100%, 42% 96%, 52% 87%, 44% 78%, 54% 69%,
+    46% 60%, 56% 51%, 48% 42%, 58% 33%, 50% 24%, 60% 16%, 54% 8%
+  );
+}
+
+/* ---------- HUD header ---------- */
+
+.hud {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem clamp(1rem, 4vw, 3rem);
+}
+
+.hud__logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-shadow: 3px 3px 0 var(--outline);
+}
+
+.hud__link {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--paper);
+  text-decoration: none;
+  border: 2px solid var(--paper);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.hud__link:hover,
+.hud__link:focus-visible {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--outline);
+}
+
+/* ---------- Ring / fighter slots ---------- */
+
+.ring {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  align-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: 1rem clamp(1.25rem, 6vw, 5rem) 3rem;
+}
+
+.fighter-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--paper);
+  color: var(--outline);
+  border: var(--outline-width) solid var(--outline);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: var(--panel-shadow);
+}
+
+.fighter-slot--a {
+  justify-self: end;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.fighter-slot--b {
+  justify-self: start;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.fighter-slot__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  width: fit-content;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  color: var(--paper);
+}
+
+.fighter-slot--a .fighter-slot__eyebrow {
+  background: var(--red);
+}
+
+.fighter-slot--b .fighter-slot__eyebrow {
+  background: var(--blue);
+  color: var(--outline);
+}
+
+.fighter-slot__input {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--outline);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid var(--outline);
+  padding: 0.35rem 0.1rem;
+  outline: none;
+}
+
+.fighter-slot__input::placeholder {
+  color: rgba(11, 9, 16, 0.45);
+  font-weight: 500;
+}
+
+.fighter-slot__input:focus-visible {
+  border-bottom-color: var(--gold);
+}
+
+/* ---------- Seam + fight button ---------- */
+
+.seam {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fight-button {
+  position: relative;
+  width: clamp(6.5rem, 12vw, 9rem);
+  height: clamp(6.5rem, 12vw, 9rem);
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline);
+  background: var(--gold);
+  color: var(--outline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  box-shadow: var(--panel-shadow);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.fight-button:hover,
+.fight-button:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 var(--outline);
+}
+
+.fight-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--outline);
+}
+
+.fight-button__vs {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+}
+
+.fight-button__label {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Form error ---------- */
+
+.form-error {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto 1.5rem;
+  max-width: 30rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--paper);
+  background: var(--red-deep);
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 760px) {
+  .ring {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding-top: 0.5rem;
+  }
+
+  .fighter-slot--a,
+  .fighter-slot--b {
+    justify-self: stretch;
+    max-width: 26rem;
+  }
+
+  .seam {
+    order: 3;
+    padding: 0.5rem 0;
+  }
+
+  .fighter-slot--a {
+    order: 1;
+  }
+
+  .fighter-slot--b {
+    order: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fight-button {
+    transition: none;
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "battleground-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Battleground — AI-judged 'who would win' fights with generated character art",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.112.3",
+    "openai": "^6.48.0",
+    "zod": "^3.23.8"
+  }
+}
