@@ -57,6 +57,50 @@
     </main>
 
     <p id="formError" class="form-error" role="alert" hidden></p>
+
+    <section id="loadingView" class="loading-view" hidden>
+      <div class="loading-view__spinner" aria-hidden="true">
+        <span class="loading-view__spinner-vs">VS</span>
+      </div>
+      <p id="loadingMessage" class="loading-view__message">Sharpening claws…</p>
+      <div class="loading-view__bar">
+        <div class="loading-view__bar-fill"></div>
+      </div>
+    </section>
+
+    <section id="resultView" class="result-view" hidden>
+      <div class="result-view__portraits">
+        <div id="portraitA" class="portrait-card portrait-card--a">
+          <span class="portrait-card__winner-badge">Winner!</span>
+          <img id="portraitImageA" class="portrait-card__image" alt="" />
+          <span id="portraitLabelA" class="portrait-card__label"></span>
+          <button class="portrait-card__save" type="button" data-save="A">Save to BattleDex</button>
+        </div>
+
+        <span class="result-view__vs" aria-hidden="true">VS</span>
+
+        <div id="portraitB" class="portrait-card portrait-card--b">
+          <span class="portrait-card__winner-badge">Winner!</span>
+          <img id="portraitImageB" class="portrait-card__image" alt="" />
+          <span id="portraitLabelB" class="portrait-card__label"></span>
+          <button class="portrait-card__save" type="button" data-save="B">Save to BattleDex</button>
+        </div>
+      </div>
+
+      <div class="verdict-card">
+        <p id="verdictText" class="verdict-card__text"></p>
+      </div>
+
+      <button id="fightAgainButton" class="fight-again-button" type="button">Fight Again</button>
+    </section>
+
+    <section id="errorView" class="error-view" hidden>
+      <p id="errorMessage" class="error-view__message"></p>
+      <button id="retryButton" class="error-view__retry" type="button">Try Again</button>
+    </section>
   </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/battle.js"></script>
 </body>
 </html>
