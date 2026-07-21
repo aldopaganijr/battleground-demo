@@ -192,13 +192,13 @@ fightAgainButton.addEventListener('click', () => {
 });
 
 document.querySelectorAll('.portrait-card__save').forEach((button) => {
-  button.addEventListener('click', () => {
+  button.addEventListener('click', async () => {
     const side = button.dataset.save;
     const label = side === 'A' ? lastFighters.fighterA : lastFighters.fighterB;
     const imageDataUrl = side === 'A' ? portraitImageA.src : portraitImageB.src;
 
     try {
-      saveToBattledex({ label, imageDataUrl });
+      await saveToBattledex({ label, imageDataUrl });
       markLastFightSaved(side);
       button.disabled = true;
       button.textContent = 'Saved!';

@@ -1,5 +1,21 @@
 const BATTLEDEX_STORAGE_KEY = 'battledex';
 const BATTLEDEX_MAX_ENTRIES = 20;
+const BATTLEDEX_IMAGE_MAX_DIM = 400;
+
+function resizeImageDataUrl(dataUrl, maxDim) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = maxDim;
+      canvas.height = maxDim;
+      canvas.getContext('2d').drawImage(img, 0, 0, maxDim, maxDim);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
 
 function getBattledex() {
   try {
@@ -11,12 +27,13 @@ function getBattledex() {
   }
 }
 
-function saveToBattledex({ label, imageDataUrl }) {
+async function saveToBattledex({ label, imageDataUrl }) {
+  const resized = await resizeImageDataUrl(imageDataUrl, BATTLEDEX_IMAGE_MAX_DIM);
   const dex = getBattledex();
   dex.push({
     id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     label,
-    imageDataUrl,
+    imageDataUrl: resized,
     savedAt: Date.now(),
   });
   while (dex.length > BATTLEDEX_MAX_ENTRIES) {
