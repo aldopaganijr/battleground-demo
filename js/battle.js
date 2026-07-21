@@ -132,7 +132,7 @@ function showResult(data, { persist = true, savedA = false, savedB = false } = {
 function setSaveButtonState(side, saved) {
   const button = document.querySelector(`.portrait-card__save[data-save="${side}"]`);
   button.disabled = saved;
-  button.textContent = saved ? 'Saved!' : 'Save to BattleDex';
+  button.textContent = saved ? 'Saved!' : 'Add to BattleDex';
 }
 
 function validateFighter(value) {
@@ -211,7 +211,7 @@ document.querySelectorAll('.portrait-card__save').forEach((button) => {
       button.disabled = true;
       button.textContent = 'Saved!';
     } catch {
-      button.textContent = 'Save failed (storage full)';
+      button.textContent = 'Add failed (storage full)';
     }
   });
 });

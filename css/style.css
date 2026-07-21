@@ -120,6 +120,13 @@ input {
   text-decoration: none;
 }
 
+.hud__logo-sword {
+  display: inline-block;
+  font-size: 1.15em;
+  vertical-align: -0.1em;
+  text-shadow: none;
+}
+
 .hud__link {
   font-family: var(--font-mono);
   font-size: 0.8rem;
