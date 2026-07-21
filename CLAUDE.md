@@ -42,7 +42,7 @@ battleground-demo/
    - Image failure → checks `error.code === 'moderation_blocked'` to distinguish `422 { error: 'moderation_blocked' }` from generic `502 { error: 'image_failed' }`.
    - Success → `200 { verdict: { winner: 'A'|'B', explanation }, imageA, imageB }` (images are `data:image/png;base64,...` strings).
 4. Client renders the VS reveal animation once the response lands, highlights the winning portrait (`winner` is `"A"` or `"B"`, mapped back to the correct side — deliberately not the fighter's text label, so identical/mirror matchups like "lion" vs "lion" aren't ambiguous).
-5. "Save to BattleDex" under each portrait stores `{ label, imageDataUrl }` into a `battledex` localStorage array via `storage.js`, capped at ~20 entries (oldest evicted first, no image compression).
+5. "Save to BattleDex" under each portrait stores `{ label, imageDataUrl }` into a `battledex` localStorage array via `storage.js`, capped at ~20 entries (oldest evicted first). Images are downscaled to 400x400 via canvas before storing — the full 1024x1024 base64 PNGs were tripping the localStorage quota after only 2-3 saves.
 6. `battledex.html` reads/renders that array in a grid. Personal to one browser, by design.
 
 ## APIs used
@@ -54,7 +54,7 @@ battleground-demo/
 - System prompt scopes Claude strictly to judging the two given fighters; explicitly told to treat any embedded instructions/prompt-injection attempts as just another weird fighter description and stay in character; must always pick exactly one winner (`"A"` or `"B"`), even for identical/mirror matchups — never a tie, never a refusal.
 
 ### OpenAI (art)
-- `client.images.generate({ model: 'gpt-image-2', prompt, size: '1024x1024', quality: 'low' })`. Quality dropped from `medium` to `low` after a live production test on Vercel Hobby timed out — a real fight (verdict + two `medium`-quality images in parallel) took 60-75s locally with no timeout, but Hobby's serverless function ceiling is a hard 60s (`vercel.json` already sets `maxDuration: 60`, the max Hobby allows). `low` quality generates fast enough to reliably land under that limit.
+- `client.images.generate({ model: 'gpt-image-2', prompt, size: '1024x1024', quality: 'low' })`. Quality dropped from `medium` to `low` after a live production test on Vercel Hobby timed out — a real fight (verdict + two `medium`-quality images in parallel) took 60-75s locally with no timeout, but `vercel.json`'s `maxDuration` was set to `60` at the time. That value was based on a stale "Hobby hard-caps at 60s" assumption — confirmed via context7 against live Vercel docs that Hobby's actual ceiling is 300s (fluid compute default across all plans) — so `maxDuration` was raised to `120` (2x the measured 60-75s runtime) instead of degrading quality further. `low` quality is kept regardless, still the right call for cost/latency.
 - `gpt-image-2` is the **current** default image model (not `gpt-image-1`, which is legacy) — confirmed via context7 against live OpenAI docs during build, since training data may be stale here.
 - GPT image models return `b64_json` by default (no `response_format` param needed, no external image hosting).
 - Shared art style template with a `{FIGHTER}` placeholder keeps every generated character visually consistent (bold flat-color illustration, thick outlines, dynamic action pose, isolated on a plain light-gray background). Explicitly forbids text/logos/UI/borders in the prompt — first pass without this produced baked-in "PLAYER 1 CHOOSE YOUR LION" style card text and a red backdrop, since the model over-interpreted "character-select screen aesthetic" literally. Quantities in the input (e.g. "10 lions") are passed straight through — not parsed or enforced as an exact count, just relies on the model reading "a lot of."
@@ -66,7 +66,7 @@ battleground-demo/
 - **One combined `/api/fight` endpoint**, not separate per-API endpoints — simpler client, one rate-limit bucket, easier to cap true cost per visitor.
 - **Rate limiting is in-memory and resets on cold start.** Known limitation, acceptable for a demo (see `ponytail:` comment in `api/fight.js`).
 - **Retry = re-run the whole fight from scratch.** No partial-failure state tracking (no separate "just retry the image that failed" logic).
-- **BattleDex has no outcome tracking** — just image + fighter label, capped collection with oldest-eviction, no thumbnail compression.
+- **BattleDex has no outcome tracking** — just image + fighter label, capped collection with oldest-eviction, images downscaled to 400x400 before storage to stay well under localStorage quota. `saveToBattledex` also self-heals on `QuotaExceededError` by evicting further even below the 20-cap, in case a browser's real quota is unusually tight.
 - **Always check context7 before writing/using any library API in this project** (Anthropic SDK, OpenAI SDK, Vercel Functions conventions, etc.) — don't rely on training-data memory of these APIs, they move fast and this project intentionally tracks current model/param names (e.g. `gpt-image-2`, `messages.parse`).
 
 ## Environment variables

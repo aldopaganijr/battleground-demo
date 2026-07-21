@@ -18,6 +18,7 @@ const ERROR_MESSAGES = {
   moderation_blocked: 'One of those fighters got flagged by the content police. Try a different description.',
   image_failed: "The artist's pencil broke. Try again?",
   network_failed: "Couldn't reach the arena. Check your connection and try again.",
+  bad_response: "The arena timed out mid-fight. Try again?",
 };
 
 const fighterAInput = document.getElementById('fighterA');
@@ -146,17 +147,24 @@ async function runFight(fighterA, fighterB) {
   startLoading();
 
   let response;
-  let data;
   try {
     response = await fetch('/api/fight', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fighterA, fighterB }),
     });
-    data = await response.json();
   } catch {
     stopLoading();
     showError('network_failed');
+    return;
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    stopLoading();
+    showError('bad_response');
     return;
   }
 
