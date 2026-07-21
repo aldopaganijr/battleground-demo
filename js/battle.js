@@ -89,7 +89,7 @@ function showError(errorCode, fallbackMessage) {
   errorView.hidden = false;
 }
 
-function showResult(data) {
+function showResult(data, { persist = true, savedA = false, savedB = false } = {}) {
   hideAll();
   resultView.hidden = false;
 
@@ -106,6 +106,19 @@ function showResult(data) {
 
   verdictText.textContent = data.verdict.explanation;
 
+  setSaveButtonState('A', savedA);
+  setSaveButtonState('B', savedB);
+
+  if (persist) {
+    saveLastFight({
+      fighterA: lastFighters.fighterA,
+      fighterB: lastFighters.fighterB,
+      imageA: data.imageA,
+      imageB: data.imageB,
+      verdict: data.verdict,
+    });
+  }
+
   // Trigger the reveal transition on the next frame so the initial
   // (hidden) state actually paints first.
   requestAnimationFrame(() => {
@@ -113,6 +126,12 @@ function showResult(data) {
       resultView.classList.add('is-revealed');
     });
   });
+}
+
+function setSaveButtonState(side, saved) {
+  const button = document.querySelector(`.portrait-card__save[data-save="${side}"]`);
+  button.disabled = saved;
+  button.textContent = saved ? 'Saved!' : 'Save to BattleDex';
 }
 
 function validateFighter(value) {
@@ -178,9 +197,24 @@ document.querySelectorAll('.portrait-card__save').forEach((button) => {
     const label = side === 'A' ? lastFighters.fighterA : lastFighters.fighterB;
     const imageDataUrl = side === 'A' ? portraitImageA.src : portraitImageB.src;
 
-    saveToBattledex({ label, imageDataUrl });
-
-    button.disabled = true;
-    button.textContent = 'Saved!';
+    try {
+      saveToBattledex({ label, imageDataUrl });
+      markLastFightSaved(side);
+      button.disabled = true;
+      button.textContent = 'Saved!';
+    } catch {
+      button.textContent = 'Save failed (storage full)';
+    }
   });
 });
+
+if (new URLSearchParams(location.search).get('recap') === '1') {
+  const lastFight = getLastFight();
+  if (lastFight) {
+    lastFighters = { fighterA: lastFight.fighterA, fighterB: lastFight.fighterB };
+    showResult(
+      { imageA: lastFight.imageA, imageB: lastFight.imageB, verdict: lastFight.verdict },
+      { persist: false, savedA: lastFight.savedA, savedB: lastFight.savedB }
+    );
+  }
+}

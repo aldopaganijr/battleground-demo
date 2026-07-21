@@ -1,5 +1,8 @@
 const dexGrid = document.getElementById('dexGrid');
 const dexEmpty = document.getElementById('dexEmpty');
+const lastFightLink = document.getElementById('lastFightLink');
+
+lastFightLink.hidden = !getLastFight();
 
 function renderBattledex() {
   const dex = getBattledex().slice().reverse();
